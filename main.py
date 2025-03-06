@@ -54,6 +54,12 @@ def main():
         for sprite in updatable:
             sprite.update(dt)
 
+        # Check for collisions
+        for sprite in asteroids:
+            if sprite.check_collision(player):
+                print("Game over!")
+                running = False
+
         for sprite in drawable:
             sprite.draw(screen)
 
