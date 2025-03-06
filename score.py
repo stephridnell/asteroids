@@ -40,8 +40,8 @@ class Score:
         self.high_scores.append((player_name, self.current_score))
         # Sort by score (highest first)
         self.high_scores.sort(key=lambda x: x[1], reverse=True)
-        # Keep only top 10
-        self.high_scores = self.high_scores[:10]
+        # Keep only top 3
+        self.high_scores = self.high_scores[:3]
         # Save to file
         self.save_high_scores()
 
