@@ -2,6 +2,8 @@
 
 A modern implementation of the classic Asteroids arcade game using Python and Pygame. This version features smooth controls, particle effects, and a beautiful starfield background.
 
+![Asteroids Game Screenshot](images/screenshot.png)
+
 ## Features
 
 - 🚀 Smooth player controls
