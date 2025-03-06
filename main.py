@@ -36,6 +36,7 @@ def main():
         screen.fill((0, 0, 0))
 
         # Draw game objects here
+        player.update(dt)
         player.draw(screen)
 
         # Update display
