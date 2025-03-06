@@ -4,7 +4,7 @@ import pygame
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
-from constants import *
+from constants import FRAMES_PER_SECOND, SCREEN_HEIGHT, SCREEN_WIDTH
 from player import Player
 from shot import Shot
 
@@ -39,8 +39,8 @@ def main():
 
     # Initialize asteroid field
     Asteroid.containers = (updatable, drawable, asteroids)
-    AsteroidField.containers = (updatable)
-    asteroid_field = AsteroidField()
+    AsteroidField.containers = updatable
+    AsteroidField()
 
     # Initialize player
     Player.containers = (updatable, drawable)
@@ -64,7 +64,7 @@ def main():
 
         # Update game state
         dt = clock.tick(FRAMES_PER_SECOND) / 1000.0  # Convert to seconds
-        
+
         # Clear screen
         screen.fill((0, 0, 0))
 

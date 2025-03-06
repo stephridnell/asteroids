@@ -29,4 +29,10 @@ class Shot(CircleShape):
         super().update(dt)
 
     def draw(self, screen):
-        pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius, 2)
+        pygame.draw.circle(
+            screen,
+            (255, 255, 255),
+            self.position,
+            self.radius,
+            2
+        )
