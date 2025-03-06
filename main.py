@@ -61,6 +61,11 @@ def main():
 
         # Check for collisions
         for sprite in asteroids:
+            for shot in shots:
+                if sprite.check_collision(shot):
+                    sprite.kill()
+                    shot.kill()
+
             if sprite.check_collision(player):
                 print("Game over!")
                 running = False
