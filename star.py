@@ -1,5 +1,6 @@
 import math
 import random
+from typing import Tuple
 
 import pygame
 
@@ -7,7 +8,7 @@ from circleshape import CircleShape
 
 
 class Star(CircleShape):
-    def __init__(self, x, y, size):
+    def __init__(self, x: float, y: float, size: float) -> None:
         super().__init__(x, y, size)
         
         # store original radius for pulsing
@@ -26,7 +27,7 @@ class Star(CircleShape):
         # twinkle props
         self.twinkle_speed = random.uniform(1, 3)
         self.twinkle_phase = random.uniform(0, 2 * math.pi)
-        self.twinkle_amount = random.uniform(0.1, 0.3)
+        self.twinkle_amount = random.uniform(0.2, 0.4)
         
         # pulse props
         self.pulse_speed = random.uniform(0.5, 1.5)
@@ -36,7 +37,7 @@ class Star(CircleShape):
         # set colour last cos it needs some of the props to set it
         self.colour = self._get_colour()
 
-    def _get_colour(self):
+    def _get_colour(self) -> Tuple[int, int, int]:
         # calc twinkling brightness
         twinkle = math.sin(self.twinkle_phase) * self.twinkle_amount
         brightness = math.floor(self.base_brightness + self.colour_variation + twinkle)
@@ -59,7 +60,7 @@ class Star(CircleShape):
             min(255, max(0, brightness + tint[2]))
         )
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.twinkle_phase += self.twinkle_speed * dt
         self.pulse_phase += self.pulse_speed * dt
         
@@ -92,5 +93,5 @@ class Star(CircleShape):
             self.pulse_phase = random.uniform(0, 2 * math.pi)
             self.angle = random.uniform(0, 2 * math.pi)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface) -> None:
         pygame.draw.circle(screen, self.colour, self.position, self.radius) 

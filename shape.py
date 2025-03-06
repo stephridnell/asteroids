@@ -1,26 +1,28 @@
+from typing import Type
+
 import pygame
 
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 
 class Shape(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x: float, y: float) -> None:
         if hasattr(self, "containers"):
             super().__init__(self.containers)
         else:
             super().__init__()
 
-        self.position = pygame.Vector2(x, y)
-        self.velocity = pygame.Vector2(0, 0)
+        self.position: pygame.Vector2 = pygame.Vector2(x, y)
+        self.velocity: pygame.Vector2 = pygame.Vector2(0, 0)
 
-    def draw(self, screen):
+    def draw(self, screen: pygame.Surface) -> None:
         pass
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.position += self.velocity * dt
         self.wrap_position()
 
-    def wrap_position(self):
+    def wrap_position(self) -> None:
         # Wrap horizontally
         if self.position.x < -self.radius:
             self.position.x = SCREEN_WIDTH + self.radius
@@ -33,5 +35,5 @@ class Shape(pygame.sprite.Sprite):
         elif self.position.y > SCREEN_HEIGHT + self.radius:
             self.position.y = -self.radius
 
-    def check_collision(self, other):
-        pass 
+    def check_collision(self, other: Type['Shape']) -> bool:
+        pass

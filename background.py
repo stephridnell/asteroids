@@ -1,5 +1,3 @@
-"""Space background with starfield effect."""
-
 import random
 
 import pygame
@@ -13,19 +11,16 @@ class Background:
         self.stars = []
         self.num_stars = 300
         self._generate_stars()
-        
-        self.nebula_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self._create_nebula()
 
-    def _create_nebula(self):
-        # apply a different shade of blue for each pixerl line of the screen
-        # to create a gradient
+    def _create_nebula(self) -> None:
+        self.nebula_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         for y in range(SCREEN_HEIGHT):
             blue = int(50 * (1 - y / SCREEN_HEIGHT)) # fade from dark blue to black
             colour = (0, 0, blue)
             pygame.draw.line(self.nebula_surface, colour, (0, y), (SCREEN_WIDTH, y))
 
-    def _generate_stars(self):
+    def _generate_stars(self) -> None:
         for _ in range(self.num_stars):
             x = random.randint(0, SCREEN_WIDTH)
             y = random.randint(0, SCREEN_HEIGHT)
@@ -43,12 +38,11 @@ class Background:
                 
             self.stars.append(Star(x, y, size))
 
-    def update(self, dt):
+    def update(self, dt) -> None:
         for star in self.stars:
             star.update(dt)
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         screen.blit(self.nebula_surface, (0, 0))
-        
         for star in self.stars:
             star.draw(screen)

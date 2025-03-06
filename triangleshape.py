@@ -1,3 +1,5 @@
+from typing import List, Union
+
 import pygame
 
 from circleshape import CircleShape
@@ -6,12 +8,12 @@ from shape import Shape
 
 
 class TriangleShape(Shape):
-    def __init__(self, x, y, radius):
+    def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y)
         self.radius = radius
         self.rotation = 0
 
-    def get_triangle_points(self):
+    def get_triangle_points(self) -> List[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
 

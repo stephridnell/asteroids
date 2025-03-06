@@ -6,9 +6,10 @@ from asteroid import Asteroid
 from constants import (ASTEROID_KINDS, ASTEROID_MAX_RADIUS,
                        ASTEROID_MIN_RADIUS, ASTEROID_SPAWN_RATE, SCREEN_HEIGHT,
                        SCREEN_WIDTH)
+from shape import Shape
 
 
-class AsteroidField(pygame.sprite.Sprite):
+class AsteroidField(Shape):
     edges = [
         [
             pygame.Vector2(1, 0),
@@ -32,17 +33,17 @@ class AsteroidField(pygame.sprite.Sprite):
         ],
     ]
 
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self, self.containers)
+    def __init__(self) -> None:
+        super().__init__(0, 0)
         self.spawn_timer = 0.0
         self.max_asteroids = 10
         self.asteroids_spawned = 0
 
-    def spawn(self, radius, position, velocity):
+    def spawn(self, radius: float, position: pygame.Vector2, velocity: pygame.Vector2) -> None:
         asteroid = Asteroid(position.x, position.y, radius)
         asteroid.velocity = velocity
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.spawn_timer += dt
         if self.spawn_timer > ASTEROID_SPAWN_RATE and self.asteroids_spawned < self.max_asteroids:
             self.spawn_timer = 0

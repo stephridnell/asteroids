@@ -1,7 +1,9 @@
 import os
+from typing import List
 
 import pygame
 
+from circleshape import CircleShape
 from constants import (PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN,
                        PLAYER_SHOOT_SPEED, PLAYER_SPEED, PLAYER_TURN_SPEED)
 from shot import Shot
@@ -9,7 +11,7 @@ from triangleshape import TriangleShape
 
 
 class Player(TriangleShape):
-    def __init__(self, x, y):
+    def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
         self.timer = 0
         self.rotation = 180
@@ -32,7 +34,7 @@ class Player(TriangleShape):
             print("Falling back to default triangle shape")
             self.sprite = None
 
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         if self.sprite:
             rotated_sprite = pygame.transform.rotate(self.sprite, -self.rotation + 180)
             rect = rotated_sprite.get_rect(center=self.position)
@@ -40,7 +42,7 @@ class Player(TriangleShape):
         else:
             # fallback triangle shape if sprite loading fails
             points = self.get_triangle_points()
-            rotated_points = []
+            rotated_points: List[pygame.Vector2] = []
             for point in points:
                 rotated = point.rotate(self.rotation)
                 translated = rotated + self.position
@@ -49,22 +51,21 @@ class Player(TriangleShape):
             pygame.draw.polygon(screen, (255, 255, 255), rotated_points)
             pygame.draw.polygon(screen, (200, 200, 200), rotated_points, 2)
 
-    def get_triangle_points(self):
-        points = [
+    def get_triangle_points(self) -> List[pygame.Vector2]:
+        return [
             pygame.Vector2(0, self.radius),
             pygame.Vector2(-self.radius * 0.6, -self.radius * 0.6),
             pygame.Vector2(self.radius * 0.6, -self.radius * 0.6),
         ]
-        return points
 
-    def rotate(self, dt):
+    def rotate(self, dt: float) -> None:
         self.rotation += PLAYER_TURN_SPEED * dt
 
-    def move(self, dt):
+    def move(self, dt: float) -> None:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.timer -= dt
         keys = pygame.key.get_pressed()
 
@@ -81,7 +82,7 @@ class Player(TriangleShape):
 
         super().update(dt)
 
-    def shoot(self, dt):
+    def shoot(self, dt: float) -> None:
         if self.timer > 0:
             return
 
@@ -89,17 +90,38 @@ class Player(TriangleShape):
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         self.timer = PLAYER_SHOOT_COOLDOWN
 
-    def check_collision(self, other):
-        # Get the triangle points
-        triangle_points = self.get_triangle_points()
-
-        # For circular objects (like asteroids), check if any point of the
-        # triangle is within the circle
-        if isinstance(other, TriangleShape):
-            for point in triangle_points:
-                if point.distance_to(other.position) < other.radius:
-                    return True
-            return False
-
-        # For other shapes, use the parent class's circular collision
-        return super().check_collision(other)
+    def check_collision(self, other) -> bool:
+        if self.sprite:
+            # Get the sprite's rect
+            sprite_rect = self.sprite.get_rect(center=self.position)
+            # Make the hitbox slightly smaller than the sprite
+            hitbox_width = sprite_rect.width * 0.7
+            hitbox_height = sprite_rect.height * 0.7
+            hitbox = pygame.Rect(
+                sprite_rect.centerx - hitbox_width / 2,
+                sprite_rect.centery - hitbox_height / 2,
+                hitbox_width,
+                hitbox_height
+            )
+            
+            # For circular objects (like asteroids), check if the circle intersects with the rectangle
+            if isinstance(other, CircleShape):
+                # Get the closest point on the rectangle to the circle's center
+                closest_x = max(hitbox.left, min(other.position.x, hitbox.right))
+                closest_y = max(hitbox.top, min(other.position.y, hitbox.bottom))
+                closest_point = pygame.Vector2(closest_x, closest_y)
+                
+                # Check if the distance from the closest point to the circle's center is less than the radius
+                return closest_point.distance_to(other.position) < other.radius
+            
+            # For other shapes, use the parent class's circular collision
+            return super().check_collision(other)
+        else:
+            # Fallback to triangle collision if no sprite
+            triangle_points = self.get_triangle_points()
+            if isinstance(other, TriangleShape):
+                for point in triangle_points:
+                    if point.distance_to(other.position) < other.radius:
+                        return True
+                return False
+            return super().check_collision(other)

@@ -1,5 +1,6 @@
 import math
 import random
+from typing import Dict, List
 
 import pygame
 
@@ -8,7 +9,7 @@ from constants import ASTEROID_MIN_RADIUS
 
 
 class Asteroid(CircleShape):
-    def __init__(self, x, y, radius):
+    def __init__(self, x: float, y: float, radius: float) -> None:
         super().__init__(x, y, radius)
         self.rotation = random.uniform(0, 2 * math.pi)
         self.rotation_speed = random.uniform(-30, 30)
@@ -22,15 +23,15 @@ class Asteroid(CircleShape):
         self.color = base_color
         self.dark_color = tuple(max(0, c - 40) for c in base_color)
         self.light_color = tuple(min(255, c + 40) for c in base_color)
-        
-        self._generate_points()
+
+        self.points = self._generate_points()
         self._generate_surface_details()
 
-    def _generate_points(self):
+    def _generate_points(self) -> List[pygame.Vector2]:
         # create a more irregular asteroid by adding 8-12 points around the
         # circumference of the circle
         num_points = random.randint(8, 12)
-        self.points = []
+        points: List[pygame.Vector2] = []
         
         for i in range(num_points):
             # calc angle for this point
@@ -38,16 +39,17 @@ class Asteroid(CircleShape):
             
             # add some randomness to the radius at each point
             radius_variation = random.uniform(0.8, 1.2)
-            point_radius = self.radius * radius_variation
+            point = pygame.Vector2(
+                math.cos(angle) * self.radius * radius_variation,
+                math.sin(angle) * self.radius * radius_variation
+            )
             
-            # calc point position
-            x = math.cos(angle) * point_radius
-            y = math.sin(angle) * point_radius
-            
-            self.points.append(pygame.Vector2(x, y))
+            points.append(point)
 
-    def _generate_surface_details(self):
-        self.craters = []
+        return points
+
+    def _generate_surface_details(self) -> None:
+        self.craters: List[Dict[str, float]] = []
 
         # divide the asteroid into 8 sectors so we can distribute the craters
         # a bit more evenly
@@ -81,8 +83,8 @@ class Asteroid(CircleShape):
             }
             self.craters.append(crater)
 
-    def draw(self, screen):
-        rotated_points = []
+    def draw(self, screen) -> None:
+        rotated_points: List[pygame.Vector2] = []
         for point in self.points:
             # Rotate point
             rotated = point.rotate(math.degrees(self.rotation))
@@ -97,11 +99,11 @@ class Asteroid(CircleShape):
             crater_pos = crater['pos'].rotate(math.degrees(self.rotation)) + self.position
             pygame.draw.circle(screen, self.dark_color, crater_pos, crater['radius'])
 
-    def update(self, dt):
+    def update(self, dt) -> None:
         self.rotation += math.radians(self.rotation_speed * dt)
         super().update(dt)
 
-    def split(self):
+    def split(self) -> None:
         self.kill()
 
         if self.radius <= ASTEROID_MIN_RADIUS:
