@@ -9,6 +9,7 @@ class Shot(CircleShape):
         super().__init__(x, y, SHOT_RADIUS)
 
     def update(self, dt):
+        super().update(dt)
         self.position += self.velocity * dt
 
     def draw(self, screen):

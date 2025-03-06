@@ -33,6 +33,7 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
 
     def update(self, dt):
+        super().update(dt)
         self.timer -= dt
         keys = pygame.key.get_pressed()
         
