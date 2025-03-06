@@ -7,14 +7,8 @@ from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from score import Score
 
 
-def draw_text(
-        screen: pygame.Surface,
-        text: str,
-        size: int,
-        x: int,
-        y: int,
-        color: tuple[int, int, int] = (255, 255, 255)
-) -> None:
+def draw_text(screen: pygame.Surface, text: str, size: int, x: int, y: int,
+              color: tuple[int, int, int] = (255, 255, 255)) -> None:
     font = pygame.font.Font(None, size)
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect()
@@ -36,8 +30,10 @@ def get_player_name(screen: pygame.Surface) -> str:
     input_active = True
     while input_active:
         screen.fill((0, 0, 0))
-        draw_text(screen, "Enter your name:", 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
-        draw_text(screen, name + "|", 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        draw_text(screen, "Enter your name:", 36,
+                  SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
+        draw_text(screen, name + "|", 36,
+                  SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         pygame.display.flip()
 
         for event in pygame.event.get():

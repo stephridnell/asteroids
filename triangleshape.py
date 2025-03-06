@@ -15,7 +15,8 @@ class TriangleShape(Shape):
 
     def get_triangle_points(self) -> List[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
+        right = pygame.Vector2(0, 1).rotate(
+            self.rotation + 90) * self.radius / 1.5
 
         a = self.position + forward * self.radius
         b = self.position - forward * self.radius - right
@@ -25,14 +26,17 @@ class TriangleShape(Shape):
 
     def draw(self, screen):
         # Draw the triangle
-        pygame.draw.polygon(screen, (255, 255, 255), self.get_triangle_points(), 2)
+        pygame.draw.polygon(screen, (255, 255, 255),
+                            self.get_triangle_points(), 2)
 
         if DEBUG_MODE:
             # Draw circular hitbox in red
-            pygame.draw.circle(screen, (255, 0, 0), self.position, self.radius, 1)
+            pygame.draw.circle(screen, (255, 0, 0),
+                               self.position, self.radius, 1)
 
             # Draw triangular hitbox in green
-            pygame.draw.polygon(screen, (0, 255, 0), self.get_triangle_points(), 1)
+            pygame.draw.polygon(screen, (0, 255, 0),
+                                self.get_triangle_points(), 1)
 
             # Draw triangle points in blue
             for point in self.get_triangle_points():

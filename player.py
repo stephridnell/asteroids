@@ -22,12 +22,14 @@ class Player(TriangleShape):
             # scale the sprite to match the player radius while maintaining aspect ratio
             original_width, original_height = self.sprite.get_size()
             aspect_ratio = original_height / original_width
-            
+
             # Use width as the base for scaling
-            target_width = int(PLAYER_RADIUS * 1.5)  # Slightly larger than radius
+            # Slightly larger than radius
+            target_width = int(PLAYER_RADIUS * 1.5)
             target_height = int(target_width * aspect_ratio)
-            
-            self.sprite = pygame.transform.scale(self.sprite, (target_width, target_height))
+
+            self.sprite = pygame.transform.scale(
+                self.sprite, (target_width, target_height))
 
         except (pygame.error, FileNotFoundError):
             print(f"Warning: Could not load rocket sprite from {sprite_path}")
@@ -36,7 +38,8 @@ class Player(TriangleShape):
 
     def draw(self, screen) -> None:
         if self.sprite:
-            rotated_sprite = pygame.transform.rotate(self.sprite, -self.rotation + 180)
+            rotated_sprite = pygame.transform.rotate(
+                self.sprite, -self.rotation + 180)
             rect = rotated_sprite.get_rect(center=self.position)
             screen.blit(rotated_sprite, rect)
         else:
@@ -47,7 +50,7 @@ class Player(TriangleShape):
                 rotated = point.rotate(self.rotation)
                 translated = rotated + self.position
                 rotated_points.append(translated)
-            
+
             pygame.draw.polygon(screen, (255, 255, 255), rotated_points)
             pygame.draw.polygon(screen, (200, 200, 200), rotated_points, 2)
 
@@ -87,7 +90,8 @@ class Player(TriangleShape):
             return
 
         shot = Shot(self.position, self.rotation)
-        shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        shot.velocity = pygame.Vector2(0, 1).rotate(
+            self.rotation) * PLAYER_SHOOT_SPEED
         self.timer = PLAYER_SHOOT_COOLDOWN
 
     def check_collision(self, other) -> bool:
@@ -103,17 +107,19 @@ class Player(TriangleShape):
                 hitbox_width,
                 hitbox_height
             )
-            
+
             # For circular objects (like asteroids), check if the circle intersects with the rectangle
             if isinstance(other, CircleShape):
                 # Get the closest point on the rectangle to the circle's center
-                closest_x = max(hitbox.left, min(other.position.x, hitbox.right))
-                closest_y = max(hitbox.top, min(other.position.y, hitbox.bottom))
+                closest_x = max(hitbox.left, min(
+                    other.position.x, hitbox.right))
+                closest_y = max(hitbox.top, min(
+                    other.position.y, hitbox.bottom))
                 closest_point = pygame.Vector2(closest_x, closest_y)
-                
+
                 # Check if the distance from the closest point to the circle's center is less than the radius
                 return closest_point.distance_to(other.position) < other.radius
-            
+
             # For other shapes, use the parent class's circular collision
             return super().check_collision(other)
         else:

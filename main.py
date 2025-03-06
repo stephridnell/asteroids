@@ -15,7 +15,8 @@ from shot import Shot
 def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Asteroids Game')
-    parser.add_argument('--debug', action='store_true', help='Enable debug visualization')
+    parser.add_argument('--debug', action='store_true',
+                        help='Enable debug visualization')
     args = parser.parse_args()
 
     # Set debug mode based on command line argument
@@ -103,13 +104,17 @@ def main():
             for sprite in drawable:
                 sprite.draw(screen)
 
-            draw_text(screen, f"Score: {score_manager.get_current_score()}", 24, 100, 20)
+            draw_text(
+                screen, f"Score: {score_manager.get_current_score()}", 24, 100, 20)
 
         else:
             screen.fill((0, 0, 0))
-            draw_text(screen, "Game Over!", 48, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100)
-            draw_text(screen, f"Final Score: {score_manager.get_current_score()}", 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
-            draw_text(screen, "Press ENTER to play again", 24, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
+            draw_text(screen, "Game Over!", 48, SCREEN_WIDTH //
+                      2, SCREEN_HEIGHT // 2 - 100)
+            draw_text(screen, f"Final Score: {score_manager.get_current_score()}",
+                      36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50)
+            draw_text(screen, "Press ENTER to play again", 24,
+                      SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
             draw_high_scores(screen, score_manager)
 
         # Update display

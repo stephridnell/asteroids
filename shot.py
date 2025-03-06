@@ -13,18 +13,18 @@ class Shot(CircleShape):
     def update(self, dt: float) -> None:
         # Store old position to calculate distance
         old_position = pygame.Vector2(self.position)
-        
+
         # Move the shot
         self.position += self.velocity * dt
-        
+
         # Calculate distance traveled
         self.distance_traveled += old_position.distance_to(self.position)
-        
+
         # Check if shot has traveled too far
         if self.distance_traveled > SHOT_MAX_DISTANCE:
             self.kill()
             return
-            
+
         # Handle screen wrapping
         super().update(dt)
 

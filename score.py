@@ -46,4 +46,4 @@ class Score:
         self.save_high_scores()
 
     def get_high_scores(self) -> List[Tuple[str, int]]:
-        return self.high_scores 
+        return self.high_scores

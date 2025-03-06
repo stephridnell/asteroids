@@ -9,7 +9,8 @@ class CircleShape(Shape):
         self.radius = radius
 
     def draw(self, screen) -> None:
-        pygame.draw.circle(screen, (255, 255, 255), self.position, self.radius, 2)
+        pygame.draw.circle(screen, (255, 255, 255),
+                           self.position, self.radius, 2)
 
     def check_collision(self, other) -> bool:
         if isinstance(other, CircleShape):

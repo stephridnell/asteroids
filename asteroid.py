@@ -32,18 +32,18 @@ class Asteroid(CircleShape):
         # circumference of the circle
         num_points = random.randint(8, 12)
         points: List[pygame.Vector2] = []
-        
+
         for i in range(num_points):
             # calc angle for this point
             angle = (2 * math.pi * i) / num_points
-            
+
             # add some randomness to the radius at each point
             radius_variation = random.uniform(0.8, 1.2)
             point = pygame.Vector2(
                 math.cos(angle) * self.radius * radius_variation,
                 math.sin(angle) * self.radius * radius_variation
             )
-            
+
             points.append(point)
 
         return points
@@ -54,13 +54,15 @@ class Asteroid(CircleShape):
         # divide the asteroid into 8 sectors so we can distribute the craters
         # a bit more evenly
         num_sectors = 8
-        sector_angles = [i * (2 * math.pi / num_sectors) for i in range(num_sectors)]
+        sector_angles = [i * (2 * math.pi / num_sectors)
+                         for i in range(num_sectors)]
 
         num_craters = random.randint(3, 5)
         used_sectors = set()
 
         for _ in range(num_craters):
-            available_sectors = [i for i in range(num_sectors) if i not in used_sectors]
+            available_sectors = [i for i in range(
+                num_sectors) if i not in used_sectors]
             if not available_sectors:
                 break
 
@@ -76,7 +78,7 @@ class Asteroid(CircleShape):
             distance = random.uniform(self.radius * 0.3, self.radius * 0.7)
             x = math.cos(angle) * distance
             y = math.sin(angle) * distance
-            
+
             crater = {
                 'pos': pygame.Vector2(x, y),
                 'radius': random.uniform(self.radius * 0.1, self.radius * 0.2),
@@ -96,8 +98,10 @@ class Asteroid(CircleShape):
         pygame.draw.polygon(screen, self.light_color, rotated_points, 2)
 
         for crater in self.craters:
-            crater_pos = crater['pos'].rotate(math.degrees(self.rotation)) + self.position
-            pygame.draw.circle(screen, self.dark_color, crater_pos, crater['radius'])
+            crater_pos = crater['pos'].rotate(
+                math.degrees(self.rotation)) + self.position
+            pygame.draw.circle(screen, self.dark_color,
+                               crater_pos, crater['radius'])
 
     def update(self, dt) -> None:
         self.rotation += math.radians(self.rotation_speed * dt)
