@@ -4,6 +4,7 @@ import pygame
 
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from background import Background
 from constants import FRAMES_PER_SECOND, SCREEN_HEIGHT, SCREEN_WIDTH
 from player import Player
 from shot import Shot
@@ -30,6 +31,9 @@ def main():
     # Set up display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Asteroids")
+
+    # Initialize background
+    background = Background()
 
     # Initialize sprite groups
     updatable = pygame.sprite.Group()
@@ -65,8 +69,13 @@ def main():
         # Update game state
         dt = clock.tick(FRAMES_PER_SECOND) / 1000.0  # Convert to seconds
 
+        background.update(dt)
+
         # Clear screen
         screen.fill((0, 0, 0))
+
+        # Draw background
+        background.draw(screen)
 
         for sprite in updatable:
             sprite.update(dt)
@@ -78,7 +87,7 @@ def main():
                     asteroid.split()
                     shot.kill()
 
-            if asteroid.check_collision(player):
+            if asteroid.check_collision(player) and not DEBUG_MODE:
                 print("Game over!")
                 running = False
 
