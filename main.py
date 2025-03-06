@@ -5,7 +5,9 @@ from player import Player
 
 
 def main():
-    pygame.init()  # Initialize pygame
+    # Initialize pygame
+    pygame.init()
+
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
@@ -13,12 +15,18 @@ def main():
     # Set up display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Asteroids")
-    
+
+    # Initialize sprite groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Initialize player
+    Player.containers = (updatable, drawable)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
     # Game loop setup
     clock = pygame.time.Clock()
     running = True
-
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     while running:
         # Handle events
@@ -35,9 +43,11 @@ def main():
         # Clear screen
         screen.fill((0, 0, 0))
 
-        # Draw game objects here
-        player.update(dt)
-        player.draw(screen)
+        for sprite in updatable:
+            sprite.update(dt)
+
+        for sprite in drawable:
+            sprite.draw(screen)
 
         # Update display
         pygame.display.flip()
