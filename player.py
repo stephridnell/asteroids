@@ -33,7 +33,6 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
 
     def update(self, dt):
-        super().update(dt)
         self.timer -= dt
         keys = pygame.key.get_pressed()
         
@@ -47,6 +46,8 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_SPACE]:
             self.shoot(dt)
+
+        super().update(dt)
 
     def shoot(self, dt):
         if self.timer > 0:
