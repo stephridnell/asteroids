@@ -48,9 +48,13 @@ pip install -r requirements.txt
 
 ## Running the Game
 
-```bash
+# Run without debug mode (default)
+
 python main.py
-```
+
+# Run with debug mode enabled
+
+python main.py --debug
 
 ## Game Rules
 

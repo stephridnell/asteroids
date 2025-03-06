@@ -1,7 +1,7 @@
 import pygame
 
 from circleshape import CircleShape
-from constants import (PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN,
+from constants import (DEBUG_MODE, PLAYER_RADIUS, PLAYER_SHOOT_COOLDOWN,
                        PLAYER_SHOOT_SPEED, PLAYER_SPEED, PLAYER_TURN_SPEED)
 from shot import Shot
 
@@ -12,7 +12,7 @@ class Player(CircleShape):
         self.rotation = 0
         self.timer = 0
 
-    def triangle(self):
+    def get_triangle_points(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
 
@@ -23,7 +23,19 @@ class Player(CircleShape):
         return [a, b, c]
     
     def draw(self, screen):
-        pygame.draw.polygon(screen, (255, 255, 255), self.triangle(), 2)
+        # Draw the player triangle
+        pygame.draw.polygon(screen, (255, 255, 255), self.get_triangle_points(), 2)
+        
+        if DEBUG_MODE:
+            # Draw circular hitbox in red
+            pygame.draw.circle(screen, (255, 0, 0), self.position, self.radius, 1)
+            
+            # Draw triangular hitbox in green
+            pygame.draw.polygon(screen, (0, 255, 0), self.get_triangle_points(), 1)
+            
+            # Draw triangle points in blue
+            for point in self.get_triangle_points():
+                pygame.draw.circle(screen, (0, 0, 255), point, 2)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -56,3 +68,17 @@ class Player(CircleShape):
         shot = Shot(self.position, self.rotation)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         self.timer = PLAYER_SHOOT_COOLDOWN
+
+    def check_collision(self, other):
+        # Get the triangle points
+        triangle_points = self.get_triangle_points()
+        
+        # For circular objects (like asteroids), check if any point of the triangle is within the circle
+        if isinstance(other, CircleShape):
+            for point in triangle_points:
+                if point.distance_to(other.position) < other.radius:
+                    return True
+            return False
+            
+        # For other shapes, use the parent class's circular collision
+        return super().check_collision(other)

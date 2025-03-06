@@ -16,3 +16,6 @@ SHOT_RADIUS = 5
 PLAYER_SHOOT_SPEED = 500
 PLAYER_SHOOT_COOLDOWN = 0.3
 SHOT_MAX_DISTANCE = 600  # Maximum distance a shot can travel before disappearing
+
+# Debug mode can be modified at runtime
+DEBUG_MODE = False

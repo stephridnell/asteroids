@@ -1,3 +1,5 @@
+import argparse
+
 import pygame
 
 from asteroid import Asteroid
@@ -8,12 +10,22 @@ from shot import Shot
 
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Asteroids Game')
+    parser.add_argument('--debug', action='store_true', help='Enable debug visualization')
+    args = parser.parse_args()
+
+    # Set debug mode based on command line argument
+    global DEBUG_MODE
+    DEBUG_MODE = args.debug
+
     # Initialize pygame
     pygame.init()
 
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
+    print(f"Debug mode: {'enabled' if DEBUG_MODE else 'disabled'}")
 
     # Set up display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
